@@ -1,0 +1,35 @@
+{% load client_tags %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Статистика пользователя</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <h1>Статистика пользователя {{ user.username }}</h1>
+    <a href="{% url 'client_list' %}" class="btn btn-secondary mb-3">К списку клиентов</a>
+    <a href="{% url 'mailing_list' %}" class="btn btn-secondary mb-3">К списку рассылок</a>
+    <a href="{% url 'message_list' %}" class="btn btn-secondary mb-3">К списку сообщений</a>
+    <a href="{% url 'attempt_list' %}" class="btn btn-info mb-3">Все попытки</a>
+    <a href="{% url 'logout' %}" class="btn btn-danger mb-3">Выход</a>
+
+    {% if stats %}
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Общая статистика</h5>
+            <p class="card-text">
+                <strong>Всего рассылок:</strong> {{ stats.0.total_mailings }}<br>
+                <strong>Успешных попыток:</strong> {{ stats.0.successful_attempts }}<br>
+                <strong>Неуспешных попыток:</strong> {{ stats.0.failed_attempts }}<br>
+                <strong>Всего попыток:</strong> {{ stats.0.total_attempts }}<br>
+                <strong>Отправленных сообщений:</strong> {{ stats.0.messages_sent }}
+            </p>
+        </div>
+    </div>
+    {% else %}
+    <p>Нет данных для отображения статистики.</p>
+    {% endif %}
+</div>
+</body>
+</html>
