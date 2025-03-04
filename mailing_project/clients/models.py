@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.mail import send_mail
 from django.utils import timezone
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -125,3 +125,26 @@ def create_user_profile(instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+
+class CustomUser(AbstractUser):
+    ROLE_CHOICES = (
+        ('user', 'User'),
+        ('manager', 'Manager'),
+    )
+    email = models.EmailField(_('email address'), unique=True)
+    is_email_verified = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='user')
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
+    def __str__(self):
+        return self.email
+
+    def is_manager(self):
+        return self.role == 'manager'
+
+    def is_user(self):
+        return self.role == 'user'
