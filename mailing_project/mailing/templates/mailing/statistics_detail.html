@@ -1,0 +1,42 @@
+{% extends 'mailing/base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">Статистика рассылки: {{ mailing.subject }}</h1>
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Общая статистика</h5>
+            <p><strong>Всего попыток:</strong> {{ statistics.total_attempts }}</p>
+            <p><strong>Успешные попытки:</strong> {{ statistics.successful_attempts }}</p>
+            <p><strong>Неуспешные попытки:</strong> {{ statistics.failed_attempts }}</p>
+            <p><strong>Отправленные сообщения:</strong> {{ statistics.sent_messages }}</p>
+            <p><strong>Дата создания статистики:</strong> {{ statistics.created_at }}</p>
+        </div>
+    </div>
+    <h5 class="mt-4">Детали попыток доставки</h5>
+    <table class="table table-striped mt-3">
+        <thead>
+        <tr>
+            <th>Получатель</th>
+            <th>Статус</th>
+            <th>Дата и время</th>
+            <th>Описание ошибки (если есть)</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for attempt in attempts %}
+        <tr>
+            <td>{{ attempt.recipient.email }}</td>
+            <td>{{ attempt.status }}</td>
+            <td>{{ attempt.timestamp }}</td>
+            <td>{{ attempt.error_message|default:"Нет ошибки" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4" class="text-center">Нет попыток доставки.</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'mailing:mailing_statistics' %}" class="btn btn-primary mt-3">Вернуться к списку статистики</a>
+</div>
+{% endblock %}

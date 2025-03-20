@@ -7,8 +7,9 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-django = "^5.1.6"
 clients = "^1.5"
+django-allauth = "^65.5.0"
+psycopg2-binary = "^2.9.10"
 
 
 [build-system]

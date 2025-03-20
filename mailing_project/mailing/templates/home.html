@@ -1,0 +1,8 @@
+{% extends 'mailing/base.html' %}
+
+{% block content %}
+<div class="text-center">
+    <h1>Добро пожаловать в приложение рассылок!</h1>
+    <a href="{% url 'mailing:mailing_list' %}" class="btn btn-primary">Перейти в приложение</a>
+</div>
+{% endblock %}

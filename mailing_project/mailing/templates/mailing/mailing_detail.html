@@ -1,0 +1,29 @@
+{% extends 'mailing/base.html' %}
+{% block content %}
+<section class="py-5 text-center container">
+    <div class="row py-lg-5">
+        <div class="col-lg-6 col-md-8 mx-auto">
+            <h1 class="fw-light">Рассылка</h1>
+        </div>
+    </div>
+</section>
+
+
+<h1>Рассылка №{{ object.pk }}</h1>
+<p><strong>Статус:</strong> {{ object.status }}</p>
+<p><strong>Сообщение:</strong> {{ object.message.subject }}</p>
+<p><strong>Дата начала:</strong> {{ object.start_datetime }}</p>
+<p><strong>Дата окончания:</strong> {{ object.end_datetime }}</p>
+<p><strong>Получатели:</strong> {{ object.recipients.all|join:", " }}</p>
+
+<a href="{% url 'mailing:mailing_update' object.pk %}" class="btn btn-warning">Редактировать</a>
+<a href="{% url 'mailing:mailing_delete' object.pk %}" class="btn btn-danger">Удалить</a>
+
+<form action="{% url 'mailing:send_mailing' object.pk %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Отправить рассылку</button>
+</form>
+
+<a href="{% url 'mailing:mailing_statistics_detail' object.pk %}" class="btn btn-secondary mt-2">Статистика</a>
+
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'mailing/base.html' %}
+{% block content %}
+<div class="text-center mb-4">
+    {% if request.user.is_authenticated and not request.user.is_manager %}
+    <a href="{% url 'mailing:mailing_create' %}" class="btn btn-primary">Добавить рассылку</a>
+    {% endif %}
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        {% for mailing in object_list %}
+        {% if request.user.is_manager or mailing.owner == request.user %}
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Рассылка №{{ mailing.pk }}</h5>
+                    <p class="card-text"><strong>Статус:</strong> {{ mailing.status }}</p>
+                    <p class="card-text"><strong>Сообщение:</strong> {{ mailing.message.subject }}</p>
+                    <p class="card-text"><strong>Дата начала:</strong> {{ mailing.start_datetime }}</p>
+                    <p class="card-text"><strong>Дата окончания:</strong> {{ mailing.end_datetime }}</p>
+                    <a href="{% url 'mailing:mailing_detail' mailing.pk %}" class="btn btn-info">Подробнее</a>
+                    {% if not request.user.is_manager and mailing.owner == request.user %}
+                    <a href="{% url 'mailing:mailing_update' mailing.pk %}" class="btn btn-warning">Редактировать</a>
+                    <a href="{% url 'mailing:mailing_delete' mailing.pk %}" class="btn btn-danger">Удалить</a>
+                    {% endif %}
+                    {% if request.user.is_manager %}
+                    <a href="{% url 'mailing:disable_mailing' mailing.pk %}" class="btn btn-secondary">Отключить</a>
+                    {% endif %}
+                    <a href="{% url 'mailing:mailing_statistics_detail' mailing.pk %}" class="btn btn-secondary">Статистика</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

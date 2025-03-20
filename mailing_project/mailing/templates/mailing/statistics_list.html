@@ -1,0 +1,35 @@
+{% extends 'mailing/base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">Список статистики рассылок</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Рассылка</th>
+            <th>Всего попыток</th>
+            <th>Успешные</th>
+            <th>Неуспешные</th>
+            <th>Отправленные сообщения</th>
+            <th>Дата создания</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for stat in statistics %}
+        <tr>
+            <td><a href="{% url 'mailing:mailing_statistics_detail' stat.mailing.id %}">{{ stat.mailing.subject }}</a>
+            </td>
+            <td>{{ stat.total_attempts }}</td>
+            <td>{{ stat.successful_attempts }}</td>
+            <td>{{ stat.failed_attempts }}</td>
+            <td>{{ stat.sent_messages }}</td>
+            <td>{{ stat.created_at }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" class="text-center">Нет данных о статистике.</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

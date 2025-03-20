@@ -1,0 +1,31 @@
+{% extends 'mailing/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">Статистика рассылки {% if mailing.subject %}"{{ mailing.subject }}"{% else %}№{{ mailing.id
+        }}{% endif %}</h1>
+
+    <table class="table table-bordered table-hover mt-4">
+        <thead class="table-dark">
+        <tr>
+            <th>Дата и время</th>
+            <th>Статус</th>
+            <th>Ответ почтового сервера</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for attempt in attempts %}
+        <tr>
+            <td>{{ attempt.attempt_time }}</td>
+            <td>{{ attempt.get_status_display }}</td>
+            <td>{{ attempt.server_response }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3" class="text-center">Нет данных</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

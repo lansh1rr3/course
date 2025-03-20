@@ -1,0 +1,31 @@
+{% extends 'mailing/base.html' %}
+{% block content %}
+<section class="py-5 text-center container">
+    <div class="row py-lg-5">
+        <div class="col-lg-6 col-md-8 mx-auto">
+            <h1 class="fw-light">Сообщения</h1>
+        </div>
+    </div>
+</section>
+<div class="text-center mb-4">
+    <a href="{% url 'mailing:message_create' %}" class="btn btn-primary">Добавить сообщение</a>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        {% for message in object_list %}
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ message.subject }}</h5>
+                    <p class="card-text">{{ message.body|truncatewords:20 }}</p>
+                    <a href="{% url 'mailing:message_detail' message.pk %}" class="btn btn-info">Подробнее</a>
+                    <a href="{% url 'mailing:message_update' message.pk %}" class="btn btn-warning">Редактировать</a>
+                    <a href="{% url 'mailing:message_delete' message.pk %}" class="btn btn-danger">Удалить</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

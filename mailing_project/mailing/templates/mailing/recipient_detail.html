@@ -1,0 +1,17 @@
+{% extends 'mailing/base.html' %}
+{% block content %}
+<section class="py-5 text-center container">
+    <div class="row py-lg-5">
+        <div class="col-lg-6 col-md-8 mx-auto">
+            <h1 class="fw-light">Получатели</h1>
+        </div>
+    </div>
+</section>
+
+<h1>Получатель: {{ object.full_name }}</h1>
+<p><strong>Email:</strong> {{ object.email }}</p>
+<p><strong>Комментарий:</strong> {{ object.comment }}</p>
+
+<a href="{% url 'mailing:recipient_update' object.pk %}" class="btn btn-warning">Редактировать</a>
+<a href="{% url 'mailing:recipient_delete' object.pk %}" class="btn btn-danger">Удалить</a>
+{% endblock %}
