@@ -12,6 +12,10 @@ class CustomUser(AbstractUser):
     is_email_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='user')
+    # Новые поля
+    avatar = models.ImageField(_('avatar'), upload_to='avatars/', null=True, blank=True)
+    phone_number = models.CharField(_('phone number'), max_length=15, null=True, blank=True)
+    country = models.CharField(_('country'), max_length=100, null=True, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

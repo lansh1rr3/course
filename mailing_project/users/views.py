@@ -3,14 +3,15 @@ from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView, 
     PasswordResetConfirmView, PasswordResetCompleteView
 from django.contrib.auth import logout
 from django.urls import reverse_lazy
-from .forms import CustomSignupForm
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.base import TemplateView
+from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
 from django.shortcuts import redirect, get_object_or_404
 from .models import CustomUser
+from .forms import CustomSignupForm
 
 
 class CustomLoginView(LoginView):
@@ -70,6 +71,30 @@ class UserListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     def handle_no_permission(self):
         messages.error(self.request, "У вас нет прав для просмотра списка пользователей.")
         return redirect('mailing:home')
+
+
+# Новые контроллеры
+class ProfileView(LoginRequiredMixin, DetailView):
+    model = CustomUser
+    template_name = 'users/profile.html'
+    context_object_name = 'user'
+
+    def get_object(self):
+        return self.request.user
+
+
+class ProfileEditView(LoginRequiredMixin, UpdateView):
+    model = CustomUser
+    fields = ['first_name', 'last_name', 'avatar', 'phone_number', 'country']
+    template_name = 'users/profile_edit.html'
+    success_url = reverse_lazy('users:profile')
+
+    def get_object(self):
+        return self.request.user
+
+    def form_valid(self, form):
+        messages.success(self.request, "Профиль успешно обновлён!")
+        return super().form_valid(form)
 
 
 @login_required
